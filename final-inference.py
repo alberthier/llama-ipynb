@@ -407,7 +407,11 @@ class Llama:
 
 
 def inference(prompt: str, device_name: str, temperature: float, max_new_tokens: int):
-    device = torch.device(device_name) if torch.cuda.is_available() else torch.device("cpu")
+    try:
+        import torch.mps
+        device = torch.device("mps:0")
+    except:
+        device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
     torch.set_default_device(device)
     tokenizer = Tokenizer("models/Llama-3.2-1B/tokenizer.json")
 
